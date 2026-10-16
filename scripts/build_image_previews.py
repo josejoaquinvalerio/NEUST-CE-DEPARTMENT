@@ -30,13 +30,19 @@ for year in (2017,2018):
         pix=page.get_pixmap(matrix=fitz.Matrix(1.8,1.8),alpha=False)
         base=Image.frombytes('RGB',(pix.width,pix.height),pix.samples).convert('RGBA')
         layer=Image.new('RGBA',base.size,(255,255,255,0))
-        painter=ImageDraw.Draw(layer)
+        label='NEUST - CE DEPARTMENT (COMPRE 1)'
+        # One-line watermark, rotated 15 degrees counter-clockwise from the +x axis.
+        bbox=font.getbbox(label)
+        pad=18
+        stamp=Image.new('RGBA',(bbox[2]-bbox[0]+pad*2,bbox[3]-bbox[1]+pad*2),(255,255,255,0))
+        ImageDraw.Draw(stamp).text((pad-bbox[0],pad-bbox[1]),label,font=font,fill=(26,107,163,82))
+        stamp=stamp.rotate(15,expand=True,resample=Image.Resampling.BICUBIC)
+        # Two columns; each watermark is centered on its half-page column.
         for row in range(10):
+            cy=int((row+0.5)*base.height/10)
             for col in range(2):
-                x=int((col+0.03)*base.width/2)
-                y=42+row*int(base.height/10)
-                painter.text((x,y),'NEUST - CE DEPARTMENT',font=font,fill=(26,107,163,78))
-                painter.text((x,y+23),'(COMPRE 1)',font=font,fill=(26,107,163,78))
+                cx=int((col+0.5)*base.width/2)
+                layer.alpha_composite(stamp,(cx-stamp.width//2,cy-stamp.height//2))
         image=Image.alpha_composite(base,layer).convert('RGB')
         image.save(ROOT/'pages'/f'{year}-{index+1}.webp','WEBP',quality=87,method=6)
     (ROOT/f'{year}-page-count.txt').write_text(str(len(pdf)))
