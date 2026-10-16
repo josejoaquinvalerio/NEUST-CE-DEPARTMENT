@@ -13,7 +13,17 @@ for year in (2017,2018):
         raise RuntimeError(f'{year} source is not a Word file')
     doc=Document(src)
     edits=0
-    for paragraph in doc.paragraphs:
+    paragraphs=list(doc.paragraphs)
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                paragraphs.extend(cell.paragraphs)
+    for paragraph in paragraphs:
+        if re.search(r'\b20(?:17|18)\s+Replacement\s+Set\b',paragraph.text,flags=re.I):
+            for run in paragraph.runs:
+                run.text=''
+            edits+=1
+            continue
         for run in paragraph.runs:
             before=run.text
             after=re.sub(r'\bSIT\s*:\s*','',before,flags=re.I)
