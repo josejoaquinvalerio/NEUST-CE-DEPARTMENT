@@ -16,8 +16,8 @@ for year in (2017,2018):
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
             before=run.text
-            after=re.sub(r'\\bSIT\\s*:\\s*','',before,flags=re.I)
-            after=re.sub(r'\\(\\s*(?:May|Nov(?:ember)?)\\s+20(?:17|18)\\s*\\)\\s*','',after,flags=re.I)
+            after=re.sub(r'\bSIT\s*:\s*','',before,flags=re.I)
+            after=re.sub(r'\(\s*(?:May|Nov(?:ember)?)\s+20(?:17|18)\s*\)\s*','',after,flags=re.I)
             if after!=before:
                 run.text=after
                 edits+=1
