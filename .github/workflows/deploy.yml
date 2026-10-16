@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Generate updated watermarked PDF documents
+        run: |
+          python -m pip install reportlab
+          python scripts/build_recitation_pdfs.py
       - name: Publish static site to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
