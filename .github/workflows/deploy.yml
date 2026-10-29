@@ -17,6 +17,8 @@ jobs:
           sudo apt-get install -y libreoffice-writer fonts-dejavu-core
           curl -L --fail --retry 3 'https://drive.usercontent.google.com/download?id=1Ru-c3IBuiZ-LDr1_NltaDDU-VhS8FufE&export=download&confirm=t' -o /tmp/neust-2017.docx
           curl -L --fail --retry 3 'https://drive.usercontent.google.com/download?id=17BrgwyH1kR8ekg7ksZKfudJWmfoRBBD6&export=download&confirm=t' -o /tmp/neust-2018.docx
+          curl -L --fail --retry 3 'https://drive.usercontent.google.com/download?id=1G5DffkHmM4qdt9Nc8mdaZY01pTlTyUNg&export=download&confirm=t' -o /tmp/neust-2019.pdf
+          echo 'ad057489da16b3c64acfb1734e7b12ff81552df62bf23dac6847d3ab109036c8  /tmp/neust-2019.pdf' | sha256sum -c -
           python scripts/build_image_previews.py
       - name: Publish static site to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
